@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * δ
  * Reads endian-independent data.
  *
  * @author Joachim Vandersmissen
