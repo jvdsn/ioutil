@@ -12,7 +12,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.joachimvandersmissen</groupId>
     <artifactId>ioutil</artifactId>
-    <version>1.4.0</version>
+    <version>1.4.1</version>
 
     <description>Java input and output utilities.</description>
     <inceptionYear>2018</inceptionYear>
