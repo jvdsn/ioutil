@@ -24,10 +24,20 @@ public abstract class AbstractInput implements Input {
     protected final InputStream inputStream;
     protected int position;
 
+    /**
+     * Constructs a new abstract input.
+     *
+     * @param inputStream The input stream to read from.
+     */
     protected AbstractInput(InputStream inputStream) {
         this.inputStream = inputStream;
     }
 
+    /**
+     * Constructs a new abstract input.
+     *
+     * @param bytes The bytes to read from.
+     */
     protected AbstractInput(byte... bytes) {
         this(new ByteArrayInputStream(bytes));
     }
@@ -41,7 +51,7 @@ public abstract class AbstractInput implements Input {
     public int readUnsignedByte() throws IOException {
         int i = this.inputStream.read();
         if (i < 0) {
-            throw new EOFException("end of stream");
+            throw new EOFException("End of stream");
         }
 
         this.position++;
@@ -55,16 +65,14 @@ public abstract class AbstractInput implements Input {
 
     @Override
     public byte[] readBytes(byte[] bytes, int start, int length) throws IOException {
-        for (int i = start; i < start + length; i++) {
-            bytes[i] = this.readByte();
-        }
-
+        this.inputStream.read(bytes, start, length);
         return bytes;
     }
 
     @Override
     public byte[] readBytes(byte... bytes) throws IOException {
-        return this.readBytes(bytes, 0, bytes.length);
+        this.inputStream.read(bytes);
+        return bytes;
     }
 
     @Override

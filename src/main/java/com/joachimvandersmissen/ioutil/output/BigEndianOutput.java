@@ -20,6 +20,11 @@ import java.math.BigInteger;
  * @author Joachim Vandersmissen
  */
 public class BigEndianOutput extends AbstractOutput {
+    /**
+     * Constructs a new big endian output.
+     *
+     * @param outputStream The output stream to write to.
+     */
     public BigEndianOutput(OutputStream outputStream) {
         super(outputStream);
     }

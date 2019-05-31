@@ -20,6 +20,11 @@ import java.math.BigInteger;
  * @author Joachim Vandersmissen
  */
 public class LittleEndianOutput extends AbstractOutput {
+    /**
+     * Constructs a new little endian output.
+     *
+     * @param outputStream The output stream to write to.
+     */
     public LittleEndianOutput(OutputStream outputStream) {
         super(outputStream);
     }

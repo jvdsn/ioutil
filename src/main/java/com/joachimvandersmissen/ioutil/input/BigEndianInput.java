@@ -20,10 +20,20 @@ import java.math.BigInteger;
  * @author Joachim Vandersmissen
  */
 public class BigEndianInput extends AbstractInput {
+    /**
+     * Constructs a new big endian input.
+     *
+     * @param inputStream The input stream to read from.
+     */
     public BigEndianInput(InputStream inputStream) {
         super(inputStream);
     }
 
+    /**
+     * Constructs a new big endian input.
+     *
+     * @param bytes The bytes to read from.
+     */
     public BigEndianInput(byte... bytes) {
         super(bytes);
     }

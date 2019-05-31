@@ -23,6 +23,11 @@ public abstract class AbstractOutput implements Output {
     protected final OutputStream outputStream;
     protected int position;
 
+    /**
+     * Constructs a new abstract output.
+     *
+     * @param outputStream The output stream to write to.
+     */
     protected AbstractOutput(OutputStream outputStream) {
         this.outputStream = outputStream;
     }
@@ -45,14 +50,12 @@ public abstract class AbstractOutput implements Output {
 
     @Override
     public void writeBytes(byte[] bytes, int start, int length) throws IOException {
-        for (int i = start; i < start + length; i++) {
-            this.writeByte(bytes[i]);
-        }
+        this.outputStream.write(bytes, start, length);
     }
 
     @Override
     public void writeBytes(byte... bytes) throws IOException {
-        this.writeBytes(bytes, 0, bytes.length);
+        this.outputStream.write(bytes);
     }
 
     @Override
