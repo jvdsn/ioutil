@@ -10,6 +10,7 @@
 
 package com.joachimvandersmissen.ioutil;
 
+import java.io.IOException;
 import java.io.UTFDataFormatException;
 
 /**
@@ -22,12 +23,12 @@ public enum StringEncoding {
         @Override
         public byte[] encode(String string) throws UTFDataFormatException {
             int length = string.length();
-            // Up to 3 bytes encoded per char
+            // Up to 3 bytes encoded per char.
             byte[] data = new byte[length * 3];
             int j = 0;
             for (int i = 0; i < length; i++) {
                 char c = string.charAt(i);
-                // Code points in the range '\u0000' to '\u007F' are represented by a single byte
+                // Code points in the range '\u0000' to '\u007F' are represented by a single byte.
                 if (c <= '\u007F') {
                     data[j++] = (byte) (c & 0b01111111);
                 }
@@ -37,15 +38,15 @@ public enum StringEncoding {
                     data[j++] = (byte) (0b10000000 | c & 0b00111111);
                 }
                 // Code points in the range '\u0800' to '\uFFFF' are represented by 3 bytes x, y, and z:
-                // NOTE: code points in the range '\uD800' to '\uDFFF' are reserved for the encoding of surrogate pairs
+                // NOTE: code points in the range '\uD800' to '\uDFFF' are reserved for the encoding of surrogate pairs.
                 if (c >= '\u0800' && c <= '\uD7FF' || c >= '\uE000') {
                     data[j++] = (byte) (0b11100000 | c >>> 12 & 0b00001111);
                     data[j++] = (byte) (0b10000000 | c >>> 6 & 0b00111111);
                     data[j++] = (byte) (0b10000000 | c & 0b00111111);
                 }
-                // Encoding of surrogate pairs
+                // Encoding of surrogate pairs.
                 if (c >= '\uD800' && c <= '\uDBFF') {
-                    // low surrogate
+                    // Low surrogate.
                     char d = string.charAt(++i);
                     if (d <= '\uDBFF' || d >= '\uE000') {
                         throw new UTFDataFormatException("invalid low surrogate " + Integer.toBinaryString(d) + " at position " + i + " in " + string);
@@ -74,10 +75,10 @@ public enum StringEncoding {
             while (j < bytes.length) {
                 int x = bytes[j++] & 0xFF;
                 if ((x & 0b10000000) == 0b00000000) {
-                    // Code points in the range '\u0000' to '\u007F' are represented by a single byte
+                    // Code points in the range '\u0000' to '\u007F' are represented by a single byte.
                     chars[i++] = (char) (x & 0b01111111);
                 } else if ((x & 0b11100000) == 0b11000000) {
-                    // Code points in the range '\u0080' to '\u07FF' are represented by a pair of bytes x and y
+                    // Code points in the range '\u0080' to '\u07FF' are represented by a pair of bytes x and y.
                     int y = bytes[j++] & 0xFF;
                     if ((y & 0b11000000) != 0b10000000) {
                         throw new UTFDataFormatException("invalid byte 2 format, expected 10xxxxxx but got " + Integer.toBinaryString(y));
@@ -85,8 +86,8 @@ public enum StringEncoding {
 
                     chars[i++] = (char) ((x & 0b00011111) << 6 | y & 0b00111111);
                 } else if ((x & 0b11110000) == 0b11100000) {
-                    // Code points in the range '\u0800' to '\uFFFF' are represented by 3 bytes x, y, and z
-                    // NOTE: code points in the range '\uD800' to '\uDFFF' are reserved for the encoding of surrogate pairs
+                    // Code points in the range '\u0800' to '\uFFFF' are represented by 3 bytes x, y, and z.
+                    // NOTE: code points in the range '\uD800' to '\uDFFF' are reserved for the encoding of surrogate pairs.
                     int y = bytes[j++] & 0xFF;
                     if ((y & 0b11000000) != 0b10000000) {
                         throw new UTFDataFormatException("invalid byte 2 format, expected 10xxxxxx but got " + Integer.toBinaryString(y));
@@ -105,7 +106,7 @@ public enum StringEncoding {
 
                     chars[i++] = (char) ((x & 0b00001111) << 12 | (y & 0b00111111) << 6 | z & 0b00111111);
                 } else if ((x & 0b11111000) == 0b11110000) {
-                    // Code points in the range '\u10000' to '\u10FFFF' are represented by 4 bytes x, y, z, and w
+                    // Code points in the range '\u10000' to '\u10FFFF' are represented by 4 bytes x, y, z, and w.
                     int y = bytes[j++] & 0xFF;
                     if ((y & 0b11000000) != 0b10000000) {
                         throw new UTFDataFormatException("invalid byte 2 format, expected 10xxxxxx but got " + Integer.toBinaryString(y));
@@ -119,8 +120,8 @@ public enum StringEncoding {
                         throw new UTFDataFormatException("invalid byte 4 format, expected 10xxxxxx but got " + Integer.toBinaryString(w));
                     }
 
-                    // Decode and encode as surrogate pairs
-                    // The usage of + (plus) instead of | (binary or) in the low surrogate construction is intended and part of a hack
+                    // Decode and encode as surrogate pairs.
+                    // The usage of + (plus) instead of | (binary or) in the low surrogate construction is intended and part of a hack.
                     chars[i++] = (char) (0b1101011111000000 + ((x & 0b00000011) << 8 | (y & 0b00111111) << 2 | (z & 0b00110000) >>> 4));
                     chars[i++] = (char) (0b1101110000000000 | (z & 0b00001111) << 6 | w & 0b00111111);
                 } else {
@@ -135,12 +136,12 @@ public enum StringEncoding {
         @Override
         public byte[] encode(String string) throws UTFDataFormatException {
             int length = string.length();
-            // Up to 3 bytes encoded per char
+            // Up to 3 bytes encoded per char.
             byte[] data = new byte[length * 3];
             int j = 0;
             for (int i = 0; i < length; i++) {
                 char c = string.charAt(i);
-                // Code points in the range '\u0000' to '\u007F' are represented by a single byte
+                // Code points in the range '\u0000' to '\u007F' are represented by a single byte.
                 if (c <= '\u007F') {
                     data[j++] = (byte) (c & 0b01111111);
                 }
@@ -150,15 +151,15 @@ public enum StringEncoding {
                     data[j++] = (byte) (0b10000000 | c & 0b00111111);
                 }
                 // Code points in the range '\u0800' to '\uFFFF' are represented by 3 bytes x, y, and z:
-                // NOTE: code points in the range '\uD800' to '\uDFFF' are reserved for the encoding of surrogate pairs
+                // NOTE: code points in the range '\uD800' to '\uDFFF' are reserved for the encoding of surrogate pairs.
                 if (c >= '\u0800' && c <= '\uD7FF' || c >= '\uE000') {
                     data[j++] = (byte) (0b11100000 | c >>> 12 & 0b00001111);
                     data[j++] = (byte) (0b10000000 | c >>> 6 & 0b00111111);
                     data[j++] = (byte) (0b10000000 | c & 0b00111111);
                 }
-                // Encoding of surrogate pairs
+                // Encoding of surrogate pairs.
                 if (c >= '\uD800' && c <= '\uDBFF') {
-                    // low surrogate
+                    // Low surrogate.
                     char d = string.charAt(++i);
                     if (d <= '\uDBFF' || d >= '\uE000') {
                         throw new UTFDataFormatException("invalid low surrogate " + Integer.toBinaryString(d) + " at position " + i + " in " + string);
@@ -190,10 +191,10 @@ public enum StringEncoding {
             while (j < bytes.length) {
                 int x = bytes[j++] & 0xFF;
                 if ((x & 0b10000000) == 0b00000000) {
-                    // Code points in the range '\u0000' to '\u007F' are represented by a single byte
+                    // Code points in the range '\u0000' to '\u007F' are represented by a single byte.
                     chars[i++] = (char) (x & 0b01111111);
                 } else if ((x & 0b11100000) == 0b11000000) {
-                    // Code points in the range '\u0080' to '\u07FF' are represented by a pair of bytes x and y
+                    // Code points in the range '\u0080' to '\u07FF' are represented by a pair of bytes x and y.
                     int y = bytes[j++] & 0xFF;
                     if ((y & 0b11000000) != 0b10000000) {
                         throw new UTFDataFormatException("invalid byte 2 format, expected 10xxxxxx but got " + Integer.toBinaryString(y));
@@ -201,7 +202,9 @@ public enum StringEncoding {
 
                     chars[i++] = (char) (((x & 0b00011111) << 6) + (y & 0b00111111));
                 } else if (x == 0b11101101) {
-                    // Characters with code points above U+FFFF (so-called supplementary characters) are represented by separately encoding the two surrogate code units of their UTF-16 representation. Each of the surrogate code units is represented by three bytes. This means supplementary characters are represented by six bytes, x, y, z, a, b, and c
+                    // Characters with code points above U+FFFF (so-called supplementary characters) are represented by separately encoding the two surrogate code units of their UTF-16 representation.
+                    // Each of the surrogate code units is represented by three bytes.
+                    // This means supplementary characters are represented by six bytes, x, y, z, a, b, and c.
                     int y = bytes[j++] & 0xFF;
                     if ((y & 0b11110000) != 0b10100000) {
                         throw new UTFDataFormatException("invalid byte 2 format, expected 1010xxxx but got " + Integer.toBinaryString(y));
@@ -223,12 +226,12 @@ public enum StringEncoding {
                         throw new UTFDataFormatException("invalid byte 6 format, expected 10xxxxxx but got " + Integer.toBinaryString(c));
                     }
 
-                    // Decode and encode as surrogate pairs
+                    // Decode and encode as surrogate pairs.
                     chars[i++] = (char) (0b1101100000000000 | (y & 0b00001111) << 6 | z & 0b00111111);
                     chars[i++] = (char) (0b1101110000000000 | (b & 0b00001111) << 6 | c & 0b00111111);
                 } else if ((x & 0b11110000) == 0b11100000) {
-                    // Code points in the range '\u0800' to '\uFFFF' are represented by 3 bytes x, y, and z
-                    // NOTE: code points in the range '\uD800' to '\uDFFF' are reserved for the encoding of surrogate pairs
+                    // Code points in the range '\u0800' to '\uFFFF' are represented by 3 bytes x, y, and z.
+                    // NOTE: code points in the range '\uD800' to '\uDFFF' are reserved for the encoding of surrogate pairs.
                     int y = bytes[j++] & 0xFF;
                     if ((y & 0b11000000) != 0b10000000) {
                         throw new UTFDataFormatException("invalid byte 2 format, expected 10xxxxxx but got " + Integer.toBinaryString(y));
@@ -256,7 +259,7 @@ public enum StringEncoding {
             int j = 0;
             for (int i = 0; i < length; i++) {
                 char c = string.charAt(i);
-                // Code points in the range '\u0001' to '\u007F' are represented by a single byte
+                // Code points in the range '\u0001' to '\u007F' are represented by a single byte.
                 if (c >= '\u0001' && c <= '\u007F') {
                     data[j++] = (byte) (c & 0b01111111);
                 }
@@ -266,15 +269,15 @@ public enum StringEncoding {
                     data[j++] = (byte) (0b10000000 | c & 0b00111111);
                 }
                 // Code points in the range '\u0800' to '\uFFFF' are represented by 3 bytes x, y, and z:
-                // NOTE: code points in the range '\uD800' to '\uDFFF' are reserved for the encoding of surrogate pairs
+                // NOTE: code points in the range '\uD800' to '\uDFFF' are reserved for the encoding of surrogate pairs.
                 if (c >= '\u0800' && c <= '\uD7FF' || c >= '\uE000') {
                     data[j++] = (byte) (0b11100000 | c >>> 12 & 0b00001111);
                     data[j++] = (byte) (0b10000000 | c >>> 6 & 0b00111111);
                     data[j++] = (byte) (0b10000000 | c & 0b00111111);
                 }
-                // Encoding of surrogate pairs
+                // Encoding of surrogate pairs.
                 if (c >= '\uD800' && c <= '\uDBFF') {
-                    // low surrogate
+                    // Low surrogate.
                     char d = string.charAt(++i);
                     if (d <= '\uDBFF' || d >= '\uE000') {
                         throw new UTFDataFormatException("invalid low surrogate " + Integer.toBinaryString(d) + " at position " + i + " in " + string);
@@ -310,10 +313,10 @@ public enum StringEncoding {
                         throw new UTFDataFormatException("invalid encoded code point: 0b00000000");
                     }
 
-                    // Code points in the range '\u0001' to '\u007F' are represented by a single byte
+                    // Code points in the range '\u0001' to '\u007F' are represented by a single byte.
                     chars[i++] = (char) (x & 0b01111111);
                 } else if ((x & 0b11100000) == 0b11000000) {
-                    // The null code point ('\u0000') and code points in the range '\u0080' to '\u07FF' are represented by a pair of bytes x and y
+                    // The null code point ('\u0000') and code points in the range '\u0080' to '\u07FF' are represented by a pair of bytes x and y.
                     int y = bytes[j++] & 0xFF;
                     if ((y & 0b11000000) != 0b10000000) {
                         throw new UTFDataFormatException("invalid byte 2 format, expected 10xxxxxx but got " + Integer.toBinaryString(y));
@@ -321,7 +324,9 @@ public enum StringEncoding {
 
                     chars[i++] = (char) ((x & 0b00011111) << 6 | y & 0b00111111);
                 } else if (x == 0b11101101) {
-                    // Characters with code points above U+FFFF (so-called supplementary characters) are represented by separately encoding the two surrogate code units of their UTF-16 representation. Each of the surrogate code units is represented by three bytes. This means supplementary characters are represented by six bytes, x, y, z, a, b, and c
+                    // Characters with code points above U+FFFF (so-called supplementary characters) are represented by separately encoding the two surrogate code units of their UTF-16 representation.
+                    // Each of the surrogate code units is represented by three bytes.
+                    // This means supplementary characters are represented by six bytes, x, y, z, a, b, and c.
                     int y = bytes[j++] & 0xFF;
                     if ((y & 0b11110000) != 0b10100000) {
                         throw new UTFDataFormatException("invalid byte 2 format, expected 1010xxxx but got " + Integer.toBinaryString(y));
@@ -347,8 +352,8 @@ public enum StringEncoding {
                     chars[i++] = (char) (0b1101100000000000 | (y & 0b00001111) << 6 | z & 0b00111111);
                     chars[i++] = (char) (0b1101110000000000 | (b & 0b00001111) << 6 | c & 0b00111111);
                 } else if ((x & 0b11110000) == 0b11100000) {
-                    // Code points in the range '\u0800' to '\uFFFF' are represented by 3 bytes x, y, and z
-                    // NOTE: code points in the range '\uD800' to '\uDFFF' are reserved for the encoding of surrogate pairs
+                    // Code points in the range '\u0800' to '\uFFFF' are represented by 3 bytes x, y, and z:
+                    // NOTE: code points in the range '\uD800' to '\uDFFF' are reserved for the encoding of surrogate pairs.
                     int y = bytes[j++] & 0xFF;
                     if ((y & 0b11000000) != 0b10000000) {
                         throw new UTFDataFormatException("invalid byte 2 format, expected 10xxxxxx but got " + Integer.toBinaryString(y));
@@ -371,16 +376,16 @@ public enum StringEncoding {
     /**
      * Encodes a string.
      *
-     * @param string The string to encode.
-     * @return The encoded bytes.
+     * @param string the string to encode
+     * @return the encoded bytes
      */
-    public abstract byte[] encode(String string) throws UTFDataFormatException;
+    public abstract byte[] encode(String string) throws IOException;
 
     /**
      * Decodes a string.
      *
-     * @param bytes The encoded bytes.
-     * @return The decoded string.
+     * @param bytes the encoded bytes
+     * @return the decoded string
      */
-    public abstract String decode(byte... bytes) throws UTFDataFormatException;
+    public abstract String decode(byte... bytes) throws IOException;
 }
