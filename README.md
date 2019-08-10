@@ -54,18 +54,31 @@ The latest javadoc documentation can be found here: https://jitpack.io/com/githu
 Documentation for a specific version can be found at https://jitpack.io/com/github/JoachimVandersmissen/ioutil/[version]/javadoc/
 
 ## Usage
-Reading from a big or little endian input:
+Reading from a byte array:
 ```
-InputStream inputStream = ...
-Input bigEndian = new BigEndianInput(inputStream);
-Input littleEndian = new LittleEndianInput(inputStream);
+byte[] bytes = ...
+Reader littleEndian = ByteArrayReader.littleEndian(bytes);
+Reader bigEndian = ByteArrayReader.bigEndian(bytes);
 ```
 
-Writing to a big or little endian output:
+Reading from an input stream:
+```
+InputStream inputStream = ...
+Reader littleEndian = InputStreamReader.littleEndian(inputStream);
+Reader bigEndian = InputStreamReader.bigEndian(inputStream);
+```
+Writing to a byte array:
+```
+byte[] bytes = ...
+Writer littleEndian = ByteArrayWriter.littleEndian(bytes);
+Writer bigEndian = ByteArrayWriter.bigEndian(bytes);
+```
+
+Writing to an output stream:
 ```
 OutputStream outputStream = ...
-Output bigEndian = new BigEndianOutput(outputStream);
-Output littleEndian = new LittleEndianOutput(outputStream);
+Writer littleEndian = OutputStreamWriter.littleEndian(outputStream);
+Writer bigEndian = OutputStreamWriter.bigEndian(outputStream);
 ```
 
 Encoding or decoding UTF-8, CESU-8 and Modified UTF-8 strings:
