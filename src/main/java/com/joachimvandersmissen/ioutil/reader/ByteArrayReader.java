@@ -41,23 +41,33 @@ public class ByteArrayReader extends AbstractReader {
     }
 
     /**
-     * Constructs a new little endian byte array reader.
+     * Constructs a new byte array reader reading from an entire byte array.
+     *
+     * @param littleEndian whether the reader should read in a little endian way
+     * @param bytes        the byte array to read from
+     */
+    protected ByteArrayReader(boolean littleEndian, byte... bytes) {
+        this(littleEndian, bytes, 0, bytes.length);
+    }
+
+    /**
+     * Constructs a new little endian byte array reader reading from an entire byte array.
      *
      * @param bytes the byte array to read from
      * @return The new byte array reader
      */
     public static ByteArrayReader littleEndian(byte... bytes) {
-        return new ByteArrayReader(true, bytes, 0, bytes.length);
+        return new ByteArrayReader(true, bytes);
     }
 
     /**
-     * Constructs a new big endian byte array reader.
+     * Constructs a new big endian byte array reader reading from an entire byte array.
      *
      * @param bytes the byte array to read from
      * @return The new byte array reader
      */
     public static ByteArrayReader bigEndian(byte... bytes) {
-        return new ByteArrayReader(false, bytes, 0, bytes.length);
+        return new ByteArrayReader(false, bytes);
     }
 
     /**

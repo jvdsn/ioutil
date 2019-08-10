@@ -41,23 +41,33 @@ public class ByteArrayWriter extends AbstractWriter {
     }
 
     /**
-     * Constructs a new little endian byte array writer.
+     * Constructs a new byte array writer writing to an entire byte array.
+     *
+     * @param littleEndian whether the writer should write in a little endian way
+     * @param bytes        the byte array to write to
+     */
+    protected ByteArrayWriter(boolean littleEndian, byte... bytes) {
+        this(littleEndian, bytes, 0, bytes.length);
+    }
+
+    /**
+     * Constructs a new little endian byte array writer writing to an entire byte array.
      *
      * @param bytes the byte array to write to
      * @return The new byte array writer
      */
     public static ByteArrayWriter littleEndian(byte... bytes) {
-        return new ByteArrayWriter(true, bytes, 0, bytes.length);
+        return new ByteArrayWriter(true, bytes);
     }
 
     /**
-     * Constructs a new big endian byte array writer.
+     * Constructs a new big endian byte array writer writing to an entire byte array.
      *
      * @param bytes the byte array to write to
      * @return The new byte array writer
      */
     public static ByteArrayWriter bigEndian(byte... bytes) {
-        return new ByteArrayWriter(false, bytes, 0, bytes.length);
+        return new ByteArrayWriter(false, bytes);
     }
 
     /**
