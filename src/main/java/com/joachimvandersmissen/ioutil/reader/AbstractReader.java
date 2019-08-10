@@ -8,54 +8,26 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.joachimvandersmissen.ioutil.input;
+package com.joachimvandersmissen.ioutil.reader;
 
-import java.io.ByteArrayInputStream;
-import java.io.EOFException;
 import java.io.IOException;
-import java.io.InputStream;
+import java.math.BigInteger;
 
 /**
- * Reads endian-independent data.
+ * An abstract reader.
  *
  * @author Joachim Vandersmissen
  */
-public abstract class AbstractInput implements Input {
-    protected final InputStream inputStream;
-    protected int position;
+public abstract class AbstractReader implements Reader {
+    protected boolean littleEndian;
 
     /**
-     * Constructs a new abstract input.
+     * Constructs a new abstract reader.
      *
-     * @param inputStream The input stream to read from.
+     * @param littleEndian whether the reader should read in a little endian way
      */
-    protected AbstractInput(InputStream inputStream) {
-        this.inputStream = inputStream;
-    }
-
-    /**
-     * Constructs a new abstract input.
-     *
-     * @param bytes The bytes to read from.
-     */
-    protected AbstractInput(byte... bytes) {
-        this(new ByteArrayInputStream(bytes));
-    }
-
-    @Override
-    public int position() {
-        return this.position;
-    }
-
-    @Override
-    public int readUnsignedByte() throws IOException {
-        int i = this.inputStream.read();
-        if (i < 0) {
-            throw new EOFException("End of stream");
-        }
-
-        this.position++;
-        return i;
+    protected AbstractReader(boolean littleEndian) {
+        this.littleEndian = littleEndian;
     }
 
     @Override
@@ -64,15 +36,15 @@ public abstract class AbstractInput implements Input {
     }
 
     @Override
-    public byte[] readBytes(byte[] bytes, int start, int length) throws IOException {
-        this.inputStream.read(bytes, start, length);
-        return bytes;
+    public byte[] readBytes(byte... bytes) throws IOException {
+        return this.readBytes(bytes, 0, bytes.length);
     }
 
     @Override
-    public byte[] readBytes(byte... bytes) throws IOException {
-        this.inputStream.read(bytes);
-        return bytes;
+    public int readUnsignedShort() throws IOException {
+        int b1 = this.readUnsignedByte();
+        int b2 = this.readUnsignedByte();
+        return this.littleEndian ? b2 << 8 | b1 : b1 << 8 | b2;
     }
 
     @Override
@@ -81,8 +53,33 @@ public abstract class AbstractInput implements Input {
     }
 
     @Override
+    public long readUnsignedInt() throws IOException {
+        long b1 = this.readUnsignedByte();
+        long b2 = this.readUnsignedByte();
+        long b3 = this.readUnsignedByte();
+        long b4 = this.readUnsignedByte();
+        return this.littleEndian ? b4 << 24 | b3 << 16 | b2 << 8 | b1 : b1 << 24 | b2 << 16 | b3 << 8 | b4;
+
+    }
+
+    @Override
     public int readInt() throws IOException {
         return (int) this.readUnsignedInt();
+    }
+
+    @Override
+    public BigInteger readUnsignedLong() throws IOException {
+        byte[] bytes = this.readBytes(new byte[8]);
+        if (this.littleEndian) {
+            // Reverse endiannes because BigInteger is big endian.
+            for (int i = 0; i < 4; i++) {
+                byte tmp = bytes[i];
+                bytes[i] = bytes[7 - i];
+                bytes[7 - i] = tmp;
+            }
+        }
+
+        return new BigInteger(1, bytes);
     }
 
     @Override
@@ -143,10 +140,5 @@ public abstract class AbstractInput implements Input {
         }
 
         return result;
-    }
-
-    @Override
-    public void close() throws IOException {
-        this.inputStream.close();
     }
 }

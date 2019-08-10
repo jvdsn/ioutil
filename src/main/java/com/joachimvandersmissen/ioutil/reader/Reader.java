@@ -8,137 +8,147 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.joachimvandersmissen.ioutil.input;
+package com.joachimvandersmissen.ioutil.reader;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.math.BigInteger;
 
 /**
- * Reads data.
+ * A generic reader.
  *
  * @author Joachim Vandersmissen
  */
-public interface Input extends AutoCloseable {
-    /**
-     * Returns the amount of bytes read by this input since its creation.
-     *
-     * @return The amount of bytes.
-     */
-    int position();
-
+public interface Reader extends AutoCloseable {
     /**
      * Reads an unsigned byte (8-bit integer).
      *
-     * @return The unsigned byte.
+     * @return the unsigned byte
+     * @throws EOFException if no more data can be read
      */
     int readUnsignedByte() throws IOException;
 
     /**
      * Reads a signed byte (8-bit integer).
      *
-     * @return The byte.
+     * @return the byte
+     * @throws EOFException if no more data can be read
      */
     byte readByte() throws IOException;
 
     /**
-     * Reads length signed bytes and stores them in an array, starting at start (inclusive).
+     * Reads length signed bytes in an array, starting at start (inclusive).
      *
-     * @param bytes  The array to store the read bytes in.
-     * @param start  The start position (inclusive).
-     * @param length The amount of bytes to read.
-     * @return The array.
+     * @param bytes  the array to read the bytes in
+     * @param start  the start position (inclusive)
+     * @param length the amount of bytes to read
+     * @return the byte array
+     * @throws EOFException if no more data can be read
      */
     byte[] readBytes(byte[] bytes, int start, int length) throws IOException;
 
     /**
-     * Reads signed bytes and stores them in an array.
+     * Reads signed bytes in an array.
      *
-     * @param bytes The array to store the read bytes in.
-     * @return The array.
+     * @param bytes the array to read the bytes in
+     * @return the byte array
+     * @throws EOFException if no more data can be read
      */
     byte[] readBytes(byte... bytes) throws IOException;
 
     /**
      * Reads an unsigned short (16-bit integer).
      *
-     * @return The unsigned short.
+     * @return the unsigned short
+     * @throws EOFException if no more data can be read
      */
     int readUnsignedShort() throws IOException;
 
     /**
      * Reads a signed short (16-bit integer).
      *
-     * @return The short.
+     * @return the short
+     * @throws EOFException if no more data can be read
      */
     short readShort() throws IOException;
 
     /**
      * Reads an unsigned int (32-bit integer).
      *
-     * @return The unsigned int.
+     * @return the unsigned int
+     * @throws EOFException if no more data can be read
      */
     long readUnsignedInt() throws IOException;
 
     /**
      * Reads a signed int (32-bit integer).
      *
-     * @return The int.
+     * @return the int
+     * @throws EOFException if no more data can be read
      */
     int readInt() throws IOException;
 
     /**
      * Reads an unsigned long (64-bit integer).
      *
-     * @return The unsigned long.
+     * @return the unsigned long
+     * @throws EOFException if no more data can be read
      */
     BigInteger readUnsignedLong() throws IOException;
 
     /**
      * Reads a signed long (64-bit integer).
      *
-     * @return The long.
+     * @return the long
+     * @throws EOFException if no more data can be read
      */
     long readLong() throws IOException;
 
     /**
      * Reads a char (unsigned 16-bit integer).
      *
-     * @return The char.
+     * @return the char
+     * @throws EOFException if no more data can be read
      */
     char readChar() throws IOException;
 
     /**
      * Reads a float (IEEE 754 binary32).
      *
-     * @return The float.
+     * @return the float
+     * @throws EOFException if no more data can be read
      */
     float readFloat() throws IOException;
 
     /**
      * Reads a double (IEEE 754 binary64).
      *
-     * @return The double.
+     * @return the double
+     * @throws EOFException if no more data can be read
      */
     double readDouble() throws IOException;
 
     /**
      * Reads an unsigned Little Endian Base 128 (32 bit integer decoded).
      *
-     * @return The decoded unsigned int.
+     * @return the decoded unsigned int
+     * @throws EOFException if no more data can be read
      */
     long readUnsignedLEB128() throws IOException;
 
     /**
      * Reads an unsigned Little Endian Base 128 plus 1 (32 bit integer decoded).
      *
-     * @return The decoded unsigned int.
+     * @return the decoded unsigned int
+     * @throws EOFException if no more data can be read
      */
     long readUnsignedLEB128Plus1() throws IOException;
 
     /**
      * Reads a signed Little Endian Base 128 plus 1 (32 bit integer decoded).
      *
-     * @return The decoded signed int.
+     * @return the decoded signed int
+     * @throws EOFException if no more data can be read
      */
     int readSignedLEB128() throws IOException;
 
