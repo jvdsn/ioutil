@@ -10,6 +10,7 @@
 
 package com.joachimvandersmissen.ioutil.writer;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.math.BigInteger;
 
