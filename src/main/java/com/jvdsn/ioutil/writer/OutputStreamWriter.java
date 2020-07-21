@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Joachim Vandersmissen
+ * Copyright 2020 Joachim Vandersmissen
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  *
@@ -8,7 +8,9 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.joachimvandersmissen.ioutil.writer;
+package com.jvdsn.ioutil.writer;
+
+import com.jvdsn.ioutil.Endianness;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -24,32 +26,12 @@ public class OutputStreamWriter extends AbstractWriter {
     /**
      * Constructs a new output stream writer.
      *
-     * @param littleEndian whether the writer should write in a little endian way
+     * @param endianness   the endianness of the writer
      * @param outputStream the output stream to write to
      */
-    public OutputStreamWriter(boolean littleEndian, OutputStream outputStream) {
-        super(littleEndian);
+    public OutputStreamWriter(Endianness endianness, OutputStream outputStream) {
+        super(endianness);
         this.outputStream = outputStream;
-    }
-
-    /**
-     * Constructs a new little endian output stream writer.
-     *
-     * @param outputStream the output stream to write to
-     * @return The new output stream writer
-     */
-    public static OutputStreamWriter littleEndian(OutputStream outputStream) {
-        return new OutputStreamWriter(true, outputStream);
-    }
-
-    /**
-     * Constructs a new big endian output stream writer.
-     *
-     * @param outputStream the output stream to write to
-     * @return The new output stream writer
-     */
-    public static OutputStreamWriter bigEndian(OutputStream outputStream) {
-        return new OutputStreamWriter(false, outputStream);
     }
 
     @Override

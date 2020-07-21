@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Joachim Vandersmissen
+ * Copyright 2020 Joachim Vandersmissen
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  *
@@ -8,7 +8,9 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.joachimvandersmissen.ioutil.reader;
+package com.jvdsn.ioutil.reader;
+
+import com.jvdsn.ioutil.Endianness;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -19,15 +21,15 @@ import java.math.BigInteger;
  * @author Joachim Vandersmissen
  */
 public abstract class AbstractReader implements Reader {
-    protected boolean littleEndian;
+    protected final Endianness endianness;
 
     /**
      * Constructs a new abstract reader.
      *
-     * @param littleEndian whether the reader should read in a little endian way
+     * @param endianness the endianness of the reader
      */
-    protected AbstractReader(boolean littleEndian) {
-        this.littleEndian = littleEndian;
+    protected AbstractReader(Endianness endianness) {
+        this.endianness = endianness;
     }
 
     @Override
@@ -44,7 +46,14 @@ public abstract class AbstractReader implements Reader {
     public int readUnsignedShort() throws IOException {
         int b1 = this.readUnsignedByte();
         int b2 = this.readUnsignedByte();
-        return this.littleEndian ? b2 << 8 | b1 : b1 << 8 | b2;
+        switch (this.endianness) {
+            case BIG_ENDIAN:
+                return b1 << 8 | b2;
+            case LITTLE_ENDIAN:
+                return b2 << 8 | b1;
+        }
+
+        throw new IllegalStateException("invalid endianness");
     }
 
     @Override
@@ -58,8 +67,14 @@ public abstract class AbstractReader implements Reader {
         long b2 = this.readUnsignedByte();
         long b3 = this.readUnsignedByte();
         long b4 = this.readUnsignedByte();
-        return this.littleEndian ? b4 << 24 | b3 << 16 | b2 << 8 | b1 : b1 << 24 | b2 << 16 | b3 << 8 | b4;
+        switch (this.endianness) {
+            case BIG_ENDIAN:
+                return b1 << 24 | b2 << 16 | b3 << 8 | b4;
+            case LITTLE_ENDIAN:
+                return b4 << 24 | b3 << 16 | b2 << 8 | b1;
+        }
 
+        throw new IllegalStateException("invalid endianness");
     }
 
     @Override
@@ -70,7 +85,7 @@ public abstract class AbstractReader implements Reader {
     @Override
     public BigInteger readUnsignedLong() throws IOException {
         byte[] bytes = this.readBytes(new byte[8]);
-        if (this.littleEndian) {
+        if (this.endianness == Endianness.LITTLE_ENDIAN) {
             // Reverse endiannes because BigInteger is big endian.
             for (int i = 0; i < 4; i++) {
                 byte tmp = bytes[i];

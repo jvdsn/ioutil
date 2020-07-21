@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Joachim Vandersmissen
+ * Copyright 2020 Joachim Vandersmissen
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  *
@@ -8,8 +8,9 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.joachimvandersmissen.ioutil.reader;
+package com.jvdsn.ioutil.reader;
 
+import com.jvdsn.ioutil.Endianness;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +26,7 @@ public class AbstractReaderTest {
     public void testReadByte() throws IOException {
         byte[] littleEndianBytes = {0x00, 0x7F, (byte) 0x80, (byte) 0xFF};
         byte[] bigEndianBytes = {0x00, 0x7F, (byte) 0x80, (byte) 0xFF};
-        try (Reader littleEndian = ByteArrayReader.littleEndian(littleEndianBytes); Reader bigEndian = ByteArrayReader.bigEndian(bigEndianBytes)) {
+        try (Reader littleEndian = new ByteArrayReader(Endianness.LITTLE_ENDIAN, littleEndianBytes); Reader bigEndian = new ByteArrayReader(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             Assertions.assertEquals(0, littleEndian.readByte());
             Assertions.assertEquals(0, bigEndian.readByte());
             Assertions.assertEquals(127, littleEndian.readByte());
@@ -43,7 +44,7 @@ public class AbstractReaderTest {
     public void testReadUnsignedShort() throws IOException {
         byte[] littleEndianBytes = {0x00, 0x00, (byte) 0xFF, 0x7F, 0x00, (byte) 0x80, (byte) 0xFF, (byte) 0xFF};
         byte[] bigEndianBytes = {0x00, 0x00, 0x7F, (byte) 0xFF, (byte) 0x80, 0x00, (byte) 0xFF, (byte) 0xFF};
-        try (Reader littleEndian = ByteArrayReader.littleEndian(littleEndianBytes); Reader bigEndian = ByteArrayReader.bigEndian(bigEndianBytes)) {
+        try (Reader littleEndian = new ByteArrayReader(Endianness.LITTLE_ENDIAN, littleEndianBytes); Reader bigEndian = new ByteArrayReader(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             Assertions.assertEquals(0, littleEndian.readUnsignedShort());
             Assertions.assertEquals(0, bigEndian.readUnsignedShort());
             Assertions.assertEquals(32767, littleEndian.readUnsignedShort());
@@ -61,7 +62,7 @@ public class AbstractReaderTest {
     public void testReadShort() throws IOException {
         byte[] littleEndianBytes = {0x00, 0x00, (byte) 0xFF, 0x7F, 0x00, (byte) 0x80, (byte) 0xFF, (byte) 0xFF};
         byte[] bigEndianBytes = {0x00, 0x00, 0x7F, (byte) 0xFF, (byte) 0x80, 0x00, (byte) 0xFF, (byte) 0xFF};
-        try (Reader littleEndian = ByteArrayReader.littleEndian(littleEndianBytes); Reader bigEndian = ByteArrayReader.bigEndian(bigEndianBytes)) {
+        try (Reader littleEndian = new ByteArrayReader(Endianness.LITTLE_ENDIAN, littleEndianBytes); Reader bigEndian = new ByteArrayReader(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             Assertions.assertEquals(0, littleEndian.readShort());
             Assertions.assertEquals(0, bigEndian.readShort());
             Assertions.assertEquals(32767, littleEndian.readShort());
@@ -79,7 +80,7 @@ public class AbstractReaderTest {
     public void testReadUnsignedInt() throws IOException {
         byte[] littleEndianBytes = {0x00, 0x00, 0x00, 0x00, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, 0x7F, 0x00, 0x00, 0x00, (byte) 0x80, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
         byte[] bigEndianBytes = {0x00, 0x00, 0x00, 0x00, 0x7F, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0x80, 0x00, 0x00, 0x00, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
-        try (Reader littleEndian = ByteArrayReader.littleEndian(littleEndianBytes); Reader bigEndian = ByteArrayReader.bigEndian(bigEndianBytes)) {
+        try (Reader littleEndian = new ByteArrayReader(Endianness.LITTLE_ENDIAN, littleEndianBytes); Reader bigEndian = new ByteArrayReader(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             Assertions.assertEquals(0L, littleEndian.readUnsignedInt());
             Assertions.assertEquals(0L, bigEndian.readUnsignedInt());
             Assertions.assertEquals(2147483647L, littleEndian.readUnsignedInt());
@@ -97,7 +98,7 @@ public class AbstractReaderTest {
     public void testReadInt() throws IOException {
         byte[] littleEndianBytes = {0x00, 0x00, 0x00, 0x00, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, 0x7F, 0x00, 0x00, 0x00, (byte) 0x80, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
         byte[] bigEndianBytes = {0x00, 0x00, 0x00, 0x00, 0x7F, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0x80, 0x00, 0x00, 0x00, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
-        try (Reader littleEndian = ByteArrayReader.littleEndian(littleEndianBytes); Reader bigEndian = ByteArrayReader.bigEndian(bigEndianBytes)) {
+        try (Reader littleEndian = new ByteArrayReader(Endianness.LITTLE_ENDIAN, littleEndianBytes); Reader bigEndian = new ByteArrayReader(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             Assertions.assertEquals(0, littleEndian.readInt());
             Assertions.assertEquals(0, bigEndian.readInt());
             Assertions.assertEquals(2147483647, littleEndian.readInt());
@@ -115,7 +116,7 @@ public class AbstractReaderTest {
     public void testReadUnsignedLong() throws IOException {
         byte[] littleEndianBytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0x80, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
         byte[] bigEndianBytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7F, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
-        try (Reader littleEndian = ByteArrayReader.littleEndian(littleEndianBytes); Reader bigEndian = ByteArrayReader.bigEndian(bigEndianBytes)) {
+        try (Reader littleEndian = new ByteArrayReader(Endianness.LITTLE_ENDIAN, littleEndianBytes); Reader bigEndian = new ByteArrayReader(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             Assertions.assertEquals(BigInteger.valueOf(0L), littleEndian.readUnsignedLong());
             Assertions.assertEquals(BigInteger.valueOf(0L), bigEndian.readUnsignedLong());
             Assertions.assertEquals(BigInteger.valueOf(9223372036854775807L), littleEndian.readUnsignedLong());
@@ -133,7 +134,7 @@ public class AbstractReaderTest {
     public void testReadLong() throws IOException {
         byte[] littleEndianBytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0x80, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
         byte[] bigEndianBytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7F, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
-        try (Reader littleEndian = ByteArrayReader.littleEndian(littleEndianBytes); Reader bigEndian = ByteArrayReader.bigEndian(bigEndianBytes)) {
+        try (Reader littleEndian = new ByteArrayReader(Endianness.LITTLE_ENDIAN, littleEndianBytes); Reader bigEndian = new ByteArrayReader(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             Assertions.assertEquals(0L, littleEndian.readLong());
             Assertions.assertEquals(0L, bigEndian.readLong());
             Assertions.assertEquals(9223372036854775807L, littleEndian.readLong());
@@ -151,7 +152,7 @@ public class AbstractReaderTest {
     public void testReadChar() throws IOException {
         byte[] littleEndianBytes = {0x00, 0x00, (byte) 0xFF, 0x7F, 0x00, (byte) 0x80, (byte) 0xFF, (byte) 0xFF};
         byte[] bigEndianBytes = {0x00, 0x00, 0x7F, (byte) 0xFF, (byte) 0x80, 0x00, (byte) 0xFF, (byte) 0xFF};
-        try (Reader littleEndian = ByteArrayReader.littleEndian(littleEndianBytes); Reader bigEndian = ByteArrayReader.bigEndian(bigEndianBytes)) {
+        try (Reader littleEndian = new ByteArrayReader(Endianness.LITTLE_ENDIAN, littleEndianBytes); Reader bigEndian = new ByteArrayReader(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             Assertions.assertEquals('\u0000', littleEndian.readChar());
             Assertions.assertEquals('\u0000', bigEndian.readChar());
             Assertions.assertEquals('\u7FFF', littleEndian.readChar());
@@ -169,7 +170,7 @@ public class AbstractReaderTest {
     public void testReadFloat() throws IOException {
         byte[] littleEndianBytes = {0x00, 0x00, 0x00, 0x00, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, 0x7F, 0x00, 0x00, 0x00, (byte) 0x80, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
         byte[] bigEndianBytes = {0x00, 0x00, 0x00, 0x00, 0x7F, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0x80, 0x00, 0x00, 0x00, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
-        try (Reader littleEndian = ByteArrayReader.littleEndian(littleEndianBytes); Reader bigEndian = ByteArrayReader.bigEndian(bigEndianBytes)) {
+        try (Reader littleEndian = new ByteArrayReader(Endianness.LITTLE_ENDIAN, littleEndianBytes); Reader bigEndian = new ByteArrayReader(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             Assertions.assertEquals(Float.intBitsToFloat(0), littleEndian.readFloat());
             Assertions.assertEquals(Float.intBitsToFloat(0), bigEndian.readFloat());
             Assertions.assertEquals(Float.intBitsToFloat(2147483647), littleEndian.readFloat());
@@ -187,7 +188,7 @@ public class AbstractReaderTest {
     public void testReadDouble() throws IOException {
         byte[] littleEndianBytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0x80, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
         byte[] bigEndianBytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7F, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
-        try (Reader littleEndian = ByteArrayReader.littleEndian(littleEndianBytes); Reader bigEndian = ByteArrayReader.bigEndian(bigEndianBytes)) {
+        try (Reader littleEndian = new ByteArrayReader(Endianness.LITTLE_ENDIAN, littleEndianBytes); Reader bigEndian = new ByteArrayReader(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             Assertions.assertEquals(Double.longBitsToDouble(0L), littleEndian.readDouble());
             Assertions.assertEquals(Double.longBitsToDouble(0L), bigEndian.readDouble());
             Assertions.assertEquals(Double.longBitsToDouble(9223372036854775807L), littleEndian.readDouble());
@@ -205,7 +206,7 @@ public class AbstractReaderTest {
     public void testReadUnsignedLEB128() throws IOException {
         byte[] littleEndianBytes = {0x00, 0x01, 0x7F, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, 0x07, (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80, 0x08, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, 0x0F, (byte) 0xE5, (byte) 0x8E, 0x26};
         byte[] bigEndianBytes = {0x00, 0x01, 0x7F, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, 0x07, (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80, 0x08, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, 0x0F, (byte) 0xE5, (byte) 0x8E, 0x26};
-        try (Reader littleEndian = ByteArrayReader.littleEndian(littleEndianBytes); Reader bigEndian = ByteArrayReader.bigEndian(bigEndianBytes)) {
+        try (Reader littleEndian = new ByteArrayReader(Endianness.LITTLE_ENDIAN, littleEndianBytes); Reader bigEndian = new ByteArrayReader(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             Assertions.assertEquals(0L, littleEndian.readUnsignedLEB128());
             Assertions.assertEquals(0L, bigEndian.readUnsignedLEB128());
             Assertions.assertEquals(1L, littleEndian.readUnsignedLEB128());
@@ -229,7 +230,7 @@ public class AbstractReaderTest {
     public void testReadUnsignedLEB128Plus1() throws IOException {
         byte[] littleEndianBytes = {0x00, 0x01, 0x02, (byte) 0x80, 0x01, (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80, 0x08, (byte) 0x81, (byte) 0x80, (byte) 0x80, (byte) 0x80, 0x08, (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80, 0x10};
         byte[] bigEndianBytes = {0x00, 0x01, 0x02, (byte) 0x80, 0x01, (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80, 0x08, (byte) 0x81, (byte) 0x80, (byte) 0x80, (byte) 0x80, 0x08, (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80, 0x10};
-        try (Reader littleEndian = ByteArrayReader.littleEndian(littleEndianBytes); Reader bigEndian = ByteArrayReader.bigEndian(bigEndianBytes)) {
+        try (Reader littleEndian = new ByteArrayReader(Endianness.LITTLE_ENDIAN, littleEndianBytes); Reader bigEndian = new ByteArrayReader(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             Assertions.assertEquals(-1L, littleEndian.readUnsignedLEB128Plus1());
             Assertions.assertEquals(-1L, bigEndian.readUnsignedLEB128Plus1());
             Assertions.assertEquals(0L, littleEndian.readUnsignedLEB128Plus1());
@@ -253,7 +254,7 @@ public class AbstractReaderTest {
     public void testReadSignedLEB128() throws IOException {
         byte[] littleEndianBytes = {0x00, 0x01, 0x7F, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, 0x07, (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x78, (byte) 0x9B, (byte) 0xF1, 0x59};
         byte[] bigEndianBytes = {0x00, 0x01, 0x7F, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, 0x07, (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x78, (byte) 0x9B, (byte) 0xF1, 0x59};
-        try (Reader littleEndian = ByteArrayReader.littleEndian(littleEndianBytes); Reader bigEndian = ByteArrayReader.bigEndian(bigEndianBytes)) {
+        try (Reader littleEndian = new ByteArrayReader(Endianness.LITTLE_ENDIAN, littleEndianBytes); Reader bigEndian = new ByteArrayReader(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             Assertions.assertEquals(0, littleEndian.readSignedLEB128());
             Assertions.assertEquals(0, bigEndian.readSignedLEB128());
             Assertions.assertEquals(1, littleEndian.readSignedLEB128());

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Joachim Vandersmissen
+ * Copyright 2020 Joachim Vandersmissen
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  *
@@ -8,7 +8,9 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.joachimvandersmissen.ioutil.writer;
+package com.jvdsn.ioutil.writer;
+
+import com.jvdsn.ioutil.Endianness;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -27,13 +29,13 @@ public class ByteArrayWriter extends AbstractWriter {
     /**
      * Constructs a new byte array writer.
      *
-     * @param littleEndian whether the writer should write in a little endian way
-     * @param bytes        the byte array to write to
-     * @param start        the position to start writing at
-     * @param length       the amount of bytes to write before throwing EOFException
+     * @param endianness the endianness of the writer
+     * @param bytes      the byte array to write to
+     * @param start      the position to start writing at
+     * @param length     the amount of bytes to write before throwing EOFException
      */
-    protected ByteArrayWriter(boolean littleEndian, byte[] bytes, int start, int length) {
-        super(littleEndian);
+    public ByteArrayWriter(Endianness endianness, byte[] bytes, int start, int length) {
+        super(endianness);
         this.bytes = bytes;
         this.start = start;
         this.length = length;
@@ -43,55 +45,11 @@ public class ByteArrayWriter extends AbstractWriter {
     /**
      * Constructs a new byte array writer writing to an entire byte array.
      *
-     * @param littleEndian whether the writer should write in a little endian way
-     * @param bytes        the byte array to write to
+     * @param endianness the endianness of the writer
+     * @param bytes      the byte array to write to
      */
-    protected ByteArrayWriter(boolean littleEndian, byte... bytes) {
-        this(littleEndian, bytes, 0, bytes.length);
-    }
-
-    /**
-     * Constructs a new little endian byte array writer writing to an entire byte array.
-     *
-     * @param bytes the byte array to write to
-     * @return The new byte array writer
-     */
-    public static ByteArrayWriter littleEndian(byte... bytes) {
-        return new ByteArrayWriter(true, bytes);
-    }
-
-    /**
-     * Constructs a new big endian byte array writer writing to an entire byte array.
-     *
-     * @param bytes the byte array to write to
-     * @return The new byte array writer
-     */
-    public static ByteArrayWriter bigEndian(byte... bytes) {
-        return new ByteArrayWriter(false, bytes);
-    }
-
-    /**
-     * Constructs a new little endian byte array writer.
-     *
-     * @param bytes  the byte array to write to
-     * @param start  the position to start writing at
-     * @param length the amount of bytes to write before throwing EOFException
-     * @return The new byte array writer
-     */
-    public static ByteArrayWriter littleEndian(byte[] bytes, int start, int length) {
-        return new ByteArrayWriter(true, bytes, start, length);
-    }
-
-    /**
-     * Constructs a new big endian byte array writer.
-     *
-     * @param bytes  the byte array to write to
-     * @param start  the position to start writing at
-     * @param length the amount of bytes to write before throwing EOFException
-     * @return The new byte array writer
-     */
-    public static ByteArrayWriter bigEndian(byte[] bytes, int start, int length) {
-        return new ByteArrayWriter(false, bytes, start, length);
+    public ByteArrayWriter(Endianness endianness, byte... bytes) {
+        this(endianness, bytes, 0, bytes.length);
     }
 
     /**

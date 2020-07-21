@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Joachim Vandersmissen
+ * Copyright 2020 Joachim Vandersmissen
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  *
@@ -8,7 +8,7 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.joachimvandersmissen.ioutil;
+package com.jvdsn.ioutil;
 
 import java.io.IOException;
 import java.io.UTFDataFormatException;
@@ -27,7 +27,7 @@ public enum StringEncoding {
             byte[] data = new byte[length * 3];
             int j = 0;
             for (int i = 0; i < length; i++) {
-                char c = string.charAt(i);
+                int c = string.charAt(i);
                 // Code points in the range '\u0000' to '\u007F' are represented by a single byte.
                 if (c <= '\u007F') {
                     data[j++] = (byte) (c & 0b01111111);
@@ -47,7 +47,7 @@ public enum StringEncoding {
                 // Encoding of surrogate pairs.
                 if (c >= '\uD800' && c <= '\uDBFF') {
                     // Low surrogate.
-                    char d = string.charAt(++i);
+                    int d = string.charAt(++i);
                     if (d <= '\uDBFF' || d >= '\uE000') {
                         throw new UTFDataFormatException("invalid low surrogate " + Integer.toBinaryString(d) + " at position " + i + " in " + string);
                     }
@@ -140,7 +140,7 @@ public enum StringEncoding {
             byte[] data = new byte[length * 3];
             int j = 0;
             for (int i = 0; i < length; i++) {
-                char c = string.charAt(i);
+                int c = string.charAt(i);
                 // Code points in the range '\u0000' to '\u007F' are represented by a single byte.
                 if (c <= '\u007F') {
                     data[j++] = (byte) (c & 0b01111111);
@@ -160,7 +160,7 @@ public enum StringEncoding {
                 // Encoding of surrogate pairs.
                 if (c >= '\uD800' && c <= '\uDBFF') {
                     // Low surrogate.
-                    char d = string.charAt(++i);
+                    int d = string.charAt(++i);
                     if (d <= '\uDBFF' || d >= '\uE000') {
                         throw new UTFDataFormatException("invalid low surrogate " + Integer.toBinaryString(d) + " at position " + i + " in " + string);
                     }
@@ -258,7 +258,7 @@ public enum StringEncoding {
             byte[] data = new byte[length * 3];
             int j = 0;
             for (int i = 0; i < length; i++) {
-                char c = string.charAt(i);
+                int c = string.charAt(i);
                 // Code points in the range '\u0001' to '\u007F' are represented by a single byte.
                 if (c >= '\u0001' && c <= '\u007F') {
                     data[j++] = (byte) (c & 0b01111111);
@@ -278,7 +278,7 @@ public enum StringEncoding {
                 // Encoding of surrogate pairs.
                 if (c >= '\uD800' && c <= '\uDBFF') {
                     // Low surrogate.
-                    char d = string.charAt(++i);
+                    int d = string.charAt(++i);
                     if (d <= '\uDBFF' || d >= '\uE000') {
                         throw new UTFDataFormatException("invalid low surrogate " + Integer.toBinaryString(d) + " at position " + i + " in " + string);
                     }

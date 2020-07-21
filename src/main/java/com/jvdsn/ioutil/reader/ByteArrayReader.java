@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Joachim Vandersmissen
+ * Copyright 2020 Joachim Vandersmissen
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  *
@@ -8,7 +8,9 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.joachimvandersmissen.ioutil.reader;
+package com.jvdsn.ioutil.reader;
+
+import com.jvdsn.ioutil.Endianness;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -27,13 +29,13 @@ public class ByteArrayReader extends AbstractReader {
     /**
      * Constructs a new byte array reader.
      *
-     * @param littleEndian whether the reader should read in a little endian way
+     * @param endianness the endianness of the reader
      * @param bytes        the byte array to read from
      * @param start        the position to start reading at
      * @param length       the amount of bytes to read before throwing EOFException
      */
-    protected ByteArrayReader(boolean littleEndian, byte[] bytes, int start, int length) {
-        super(littleEndian);
+    public ByteArrayReader(Endianness endianness, byte[] bytes, int start, int length) {
+        super(endianness);
         this.bytes = bytes;
         this.start = start;
         this.length = length;
@@ -43,55 +45,11 @@ public class ByteArrayReader extends AbstractReader {
     /**
      * Constructs a new byte array reader reading from an entire byte array.
      *
-     * @param littleEndian whether the reader should read in a little endian way
+     * @param endianness the endianness of the reader
      * @param bytes        the byte array to read from
      */
-    protected ByteArrayReader(boolean littleEndian, byte... bytes) {
-        this(littleEndian, bytes, 0, bytes.length);
-    }
-
-    /**
-     * Constructs a new little endian byte array reader reading from an entire byte array.
-     *
-     * @param bytes the byte array to read from
-     * @return The new byte array reader
-     */
-    public static ByteArrayReader littleEndian(byte... bytes) {
-        return new ByteArrayReader(true, bytes);
-    }
-
-    /**
-     * Constructs a new big endian byte array reader reading from an entire byte array.
-     *
-     * @param bytes the byte array to read from
-     * @return The new byte array reader
-     */
-    public static ByteArrayReader bigEndian(byte... bytes) {
-        return new ByteArrayReader(false, bytes);
-    }
-
-    /**
-     * Constructs a new little endian byte array reader.
-     *
-     * @param bytes  the byte array to read from
-     * @param start  the position to start reading at
-     * @param length the amount of bytes to read before throwing EOFException
-     * @return The new byte array reader
-     */
-    public static ByteArrayReader littleEndian(byte[] bytes, int start, int length) {
-        return new ByteArrayReader(true, bytes, start, length);
-    }
-
-    /**
-     * Constructs a new big endian byte array reader.
-     *
-     * @param bytes  the byte array to read from
-     * @param start  the position to start reading at
-     * @param length the amount of bytes to read before throwing EOFException
-     * @return The new byte array reader
-     */
-    public static ByteArrayReader bigEndian(byte[] bytes, int start, int length) {
-        return new ByteArrayReader(false, bytes, start, length);
+    public ByteArrayReader(Endianness endianness, byte... bytes) {
+        this(endianness, bytes, 0, bytes.length);
     }
 
     /**

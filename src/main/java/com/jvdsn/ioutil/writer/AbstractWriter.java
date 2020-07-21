@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Joachim Vandersmissen
+ * Copyright 2020 Joachim Vandersmissen
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  *
@@ -8,7 +8,9 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.joachimvandersmissen.ioutil.writer;
+package com.jvdsn.ioutil.writer;
+
+import com.jvdsn.ioutil.Endianness;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -21,15 +23,15 @@ import java.math.BigInteger;
 public abstract class AbstractWriter implements Writer {
     public static final BigInteger MASK = BigInteger.valueOf(0xFF);
 
-    protected boolean littleEndian;
+    protected final Endianness endianness;
 
     /**
      * Constructs a new abstract writer.
      *
-     * @param littleEndian whether the writer should write in a little endian way
+     * @param endianness the endianness of the writer
      */
-    protected AbstractWriter(boolean littleEndian) {
-        this.littleEndian = littleEndian;
+    protected AbstractWriter(Endianness endianness) {
+        this.endianness = endianness;
     }
 
     @Override
@@ -44,12 +46,15 @@ public abstract class AbstractWriter implements Writer {
 
     @Override
     public void writeUnsignedShort(int s) throws IOException {
-        if (this.littleEndian) {
-            this.writeUnsignedByte(s & 0xFF);
-            this.writeUnsignedByte(s >> 8 & 0xFF);
-        } else {
-            this.writeUnsignedByte(s >> 8 & 0xFF);
-            this.writeUnsignedByte(s & 0xFF);
+        switch (this.endianness) {
+            case BIG_ENDIAN:
+                this.writeUnsignedByte(s >> 8 & 0xFF);
+                this.writeUnsignedByte(s & 0xFF);
+                break;
+            case LITTLE_ENDIAN:
+                this.writeUnsignedByte(s & 0xFF);
+                this.writeUnsignedByte(s >> 8 & 0xFF);
+                break;
         }
     }
 
@@ -60,16 +65,19 @@ public abstract class AbstractWriter implements Writer {
 
     @Override
     public void writeUnsignedInt(long i) throws IOException {
-        if (this.littleEndian) {
-            this.writeUnsignedByte((int) (i & 0xFF));
-            this.writeUnsignedByte((int) (i >> 8 & 0xFF));
-            this.writeUnsignedByte((int) (i >> 16 & 0xFF));
-            this.writeUnsignedByte((int) (i >> 24 & 0xFF));
-        } else {
-            this.writeUnsignedByte((int) (i >> 24 & 0xFF));
-            this.writeUnsignedByte((int) (i >> 16 & 0xFF));
-            this.writeUnsignedByte((int) (i >> 8 & 0xFF));
-            this.writeUnsignedByte((int) (i & 0xFF));
+        switch (this.endianness) {
+            case BIG_ENDIAN:
+                this.writeUnsignedByte((int) (i >> 24 & 0xFF));
+                this.writeUnsignedByte((int) (i >> 16 & 0xFF));
+                this.writeUnsignedByte((int) (i >> 8 & 0xFF));
+                this.writeUnsignedByte((int) (i & 0xFF));
+                break;
+            case LITTLE_ENDIAN:
+                this.writeUnsignedByte((int) (i & 0xFF));
+                this.writeUnsignedByte((int) (i >> 8 & 0xFF));
+                this.writeUnsignedByte((int) (i >> 16 & 0xFF));
+                this.writeUnsignedByte((int) (i >> 24 & 0xFF));
+                break;
         }
     }
 
@@ -80,24 +88,27 @@ public abstract class AbstractWriter implements Writer {
 
     @Override
     public void writeUnsignedLong(BigInteger l) throws IOException {
-        if (this.littleEndian) {
-            this.writeUnsignedByte(l.and(MASK).intValue());
-            this.writeUnsignedByte(l.shiftRight(8).and(MASK).intValue());
-            this.writeUnsignedByte(l.shiftRight(16).and(MASK).intValue());
-            this.writeUnsignedByte(l.shiftRight(24).and(MASK).intValue());
-            this.writeUnsignedByte(l.shiftRight(32).and(MASK).intValue());
-            this.writeUnsignedByte(l.shiftRight(40).and(MASK).intValue());
-            this.writeUnsignedByte(l.shiftRight(48).and(MASK).intValue());
-            this.writeUnsignedByte(l.shiftRight(56).and(MASK).intValue());
-        } else {
-            this.writeUnsignedByte(l.shiftRight(56).and(MASK).intValue());
-            this.writeUnsignedByte(l.shiftRight(48).and(MASK).intValue());
-            this.writeUnsignedByte(l.shiftRight(40).and(MASK).intValue());
-            this.writeUnsignedByte(l.shiftRight(32).and(MASK).intValue());
-            this.writeUnsignedByte(l.shiftRight(24).and(MASK).intValue());
-            this.writeUnsignedByte(l.shiftRight(16).and(MASK).intValue());
-            this.writeUnsignedByte(l.shiftRight(8).and(MASK).intValue());
-            this.writeUnsignedByte(l.and(MASK).intValue());
+        switch (this.endianness) {
+            case BIG_ENDIAN:
+                this.writeUnsignedByte(l.shiftRight(56).and(MASK).intValue());
+                this.writeUnsignedByte(l.shiftRight(48).and(MASK).intValue());
+                this.writeUnsignedByte(l.shiftRight(40).and(MASK).intValue());
+                this.writeUnsignedByte(l.shiftRight(32).and(MASK).intValue());
+                this.writeUnsignedByte(l.shiftRight(24).and(MASK).intValue());
+                this.writeUnsignedByte(l.shiftRight(16).and(MASK).intValue());
+                this.writeUnsignedByte(l.shiftRight(8).and(MASK).intValue());
+                this.writeUnsignedByte(l.and(MASK).intValue());
+                break;
+            case LITTLE_ENDIAN:
+                this.writeUnsignedByte(l.and(MASK).intValue());
+                this.writeUnsignedByte(l.shiftRight(8).and(MASK).intValue());
+                this.writeUnsignedByte(l.shiftRight(16).and(MASK).intValue());
+                this.writeUnsignedByte(l.shiftRight(24).and(MASK).intValue());
+                this.writeUnsignedByte(l.shiftRight(32).and(MASK).intValue());
+                this.writeUnsignedByte(l.shiftRight(40).and(MASK).intValue());
+                this.writeUnsignedByte(l.shiftRight(48).and(MASK).intValue());
+                this.writeUnsignedByte(l.shiftRight(56).and(MASK).intValue());
+                break;
         }
     }
 

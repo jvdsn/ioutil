@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/JoachimVandersmissen/ioutil.svg?branch=master)](https://travis-ci.org/JoachimVandersmissen/ioutil)
-[![Jitpack](https://jitpack.io/v/JoachimVandersmissen/ioutil.svg)](https://jitpack.io/#JoachimVandersmissen/ioutil)
+[![Build Status](https://travis-ci.com/jvdsn/ioutil.svg?branch=master)](https://travis-ci.org/jvdsn/ioutil)
+[![Jitpack](https://jitpack.io/v/jvdsn/ioutil.svg)](https://jitpack.io/#jvdsn/ioutil)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 # ioutil
 This library provides various input and output utilities:
@@ -26,7 +26,7 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency  
 ```
     dependencies {
-            compile 'com.github.JoachimVandersmissen:ioutil:[version]'
+            compile 'com.github.jvdsn:ioutil:[version]'
     }
 ```  
 
@@ -43,15 +43,15 @@ Step 1. Add the JitPack repository to your build file
 Step 2. Add the dependency  
 ```
     <dependency>
-        <groupId>com.github.JoachimVandersmissen</groupId>
+        <groupId>com.github.jvdsn</groupId>
         <artifactId>ioutil</artifactId>
         <version>[version]</version>
     </dependency>
 ```  
 
 ## Documentation
-The latest javadoc documentation can be found here: https://jitpack.io/com/github/JoachimVandersmissen/ioutil/master-SNAPSHOT/javadoc/  
-Documentation for a specific version can be found at https://jitpack.io/com/github/JoachimVandersmissen/ioutil/[version]/javadoc/
+The latest javadoc documentation can be found here: https://jitpack.io/com/github/jvdsn/ioutil/master-SNAPSHOT/javadoc/  
+Documentation for a specific version can be found at https://jitpack.io/com/github/jvdsn/ioutil/[version]/javadoc/
 
 ## Usage
 Reading from a byte array:

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Joachim Vandersmissen
+ * Copyright 2020 Joachim Vandersmissen
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  *
@@ -8,8 +8,9 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.joachimvandersmissen.ioutil.writer;
+package com.jvdsn.ioutil.writer;
 
+import com.jvdsn.ioutil.Endianness;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +26,7 @@ public class AbstractWriterTest {
     public void testWriteByte() throws IOException {
         byte[] littleEndianBytes = new byte[4];
         byte[] bigEndianBytes = new byte[4];
-        try (Writer littleEndian = ByteArrayWriter.littleEndian(littleEndianBytes); Writer bigEndian = ByteArrayWriter.bigEndian(bigEndianBytes)) {
+        try (Writer littleEndian = new ByteArrayWriter(Endianness.LITTLE_ENDIAN, littleEndianBytes); Writer bigEndian = new ByteArrayWriter(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             littleEndian.writeByte((byte) 0);
             bigEndian.writeByte((byte) 0);
             littleEndian.writeByte((byte) 127);
@@ -46,7 +47,7 @@ public class AbstractWriterTest {
     public void testWriteUnsignedShort() throws IOException {
         byte[] littleEndianBytes = new byte[8];
         byte[] bigEndianBytes = new byte[8];
-        try (Writer littleEndian = ByteArrayWriter.littleEndian(littleEndianBytes); Writer bigEndian = ByteArrayWriter.bigEndian(bigEndianBytes)) {
+        try (Writer littleEndian = new ByteArrayWriter(Endianness.LITTLE_ENDIAN, littleEndianBytes); Writer bigEndian = new ByteArrayWriter(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             littleEndian.writeUnsignedShort(0);
             bigEndian.writeUnsignedShort(0);
             littleEndian.writeUnsignedShort(32767);
@@ -64,10 +65,10 @@ public class AbstractWriterTest {
     }
 
     @Test
-    public void writeShort() throws IOException {
+    public void testeWriteShort() throws IOException {
         byte[] littleEndianBytes = new byte[8];
         byte[] bigEndianBytes = new byte[8];
-        try (Writer littleEndian = ByteArrayWriter.littleEndian(littleEndianBytes); Writer bigEndian = ByteArrayWriter.bigEndian(bigEndianBytes)) {
+        try (Writer littleEndian = new ByteArrayWriter(Endianness.LITTLE_ENDIAN, littleEndianBytes); Writer bigEndian = new ByteArrayWriter(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             littleEndian.writeShort((short) 0);
             bigEndian.writeShort((short) 0);
             littleEndian.writeShort((short) 32767);
@@ -88,7 +89,7 @@ public class AbstractWriterTest {
     public void testWriteUnsignedInt() throws IOException {
         byte[] littleEndianBytes = new byte[16];
         byte[] bigEndianBytes = new byte[16];
-        try (Writer littleEndian = ByteArrayWriter.littleEndian(littleEndianBytes); Writer bigEndian = ByteArrayWriter.bigEndian(bigEndianBytes)) {
+        try (Writer littleEndian = new ByteArrayWriter(Endianness.LITTLE_ENDIAN, littleEndianBytes); Writer bigEndian = new ByteArrayWriter(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             littleEndian.writeUnsignedInt(0L);
             bigEndian.writeUnsignedInt(0L);
             littleEndian.writeUnsignedInt(2147483647L);
@@ -109,7 +110,7 @@ public class AbstractWriterTest {
     public void testWriteInt() throws IOException {
         byte[] littleEndianBytes = new byte[16];
         byte[] bigEndianBytes = new byte[16];
-        try (Writer littleEndian = ByteArrayWriter.littleEndian(littleEndianBytes); Writer bigEndian = ByteArrayWriter.bigEndian(bigEndianBytes)) {
+        try (Writer littleEndian = new ByteArrayWriter(Endianness.LITTLE_ENDIAN, littleEndianBytes); Writer bigEndian = new ByteArrayWriter(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             littleEndian.writeInt(0);
             bigEndian.writeInt(0);
             littleEndian.writeInt(2147483647);
@@ -130,7 +131,7 @@ public class AbstractWriterTest {
     public void testWriteUnsignedLong() throws IOException {
         byte[] littleEndianBytes = new byte[32];
         byte[] bigEndianBytes = new byte[32];
-        try (Writer littleEndian = ByteArrayWriter.littleEndian(littleEndianBytes); Writer bigEndian = ByteArrayWriter.bigEndian(bigEndianBytes)) {
+        try (Writer littleEndian = new ByteArrayWriter(Endianness.LITTLE_ENDIAN, littleEndianBytes); Writer bigEndian = new ByteArrayWriter(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             littleEndian.writeUnsignedLong(BigInteger.valueOf(0L));
             bigEndian.writeUnsignedLong(BigInteger.valueOf(0L));
             littleEndian.writeUnsignedLong(BigInteger.valueOf(9223372036854775807L));
@@ -151,7 +152,7 @@ public class AbstractWriterTest {
     public void testWriteLong() throws IOException {
         byte[] littleEndianBytes = new byte[32];
         byte[] bigEndianBytes = new byte[32];
-        try (Writer littleEndian = ByteArrayWriter.littleEndian(littleEndianBytes); Writer bigEndian = ByteArrayWriter.bigEndian(bigEndianBytes)) {
+        try (Writer littleEndian = new ByteArrayWriter(Endianness.LITTLE_ENDIAN, littleEndianBytes); Writer bigEndian = new ByteArrayWriter(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             littleEndian.writeLong(0L);
             bigEndian.writeLong(0L);
             littleEndian.writeLong(9223372036854775807L);
@@ -172,7 +173,7 @@ public class AbstractWriterTest {
     public void testWriteChar() throws IOException {
         byte[] littleEndianBytes = new byte[8];
         byte[] bigEndianBytes = new byte[8];
-        try (Writer littleEndian = ByteArrayWriter.littleEndian(littleEndianBytes); Writer bigEndian = ByteArrayWriter.bigEndian(bigEndianBytes)) {
+        try (Writer littleEndian = new ByteArrayWriter(Endianness.LITTLE_ENDIAN, littleEndianBytes); Writer bigEndian = new ByteArrayWriter(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             littleEndian.writeChar('\u0000');
             bigEndian.writeChar('\u0000');
             littleEndian.writeChar('\u7fff');
@@ -193,7 +194,7 @@ public class AbstractWriterTest {
     public void testWriteFloat() throws IOException {
         byte[] littleEndianBytes = new byte[16];
         byte[] bigEndianBytes = new byte[16];
-        try (Writer littleEndian = ByteArrayWriter.littleEndian(littleEndianBytes); Writer bigEndian = ByteArrayWriter.bigEndian(bigEndianBytes)) {
+        try (Writer littleEndian = new ByteArrayWriter(Endianness.LITTLE_ENDIAN, littleEndianBytes); Writer bigEndian = new ByteArrayWriter(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             littleEndian.writeFloat(Float.intBitsToFloat(0));
             bigEndian.writeFloat(Float.intBitsToFloat(0));
             littleEndian.writeFloat(Float.intBitsToFloat(2147483647));
@@ -214,7 +215,7 @@ public class AbstractWriterTest {
     public void testWriteDouble() throws IOException {
         byte[] littleEndianBytes = new byte[32];
         byte[] bigEndianBytes = new byte[32];
-        try (Writer littleEndian = ByteArrayWriter.littleEndian(littleEndianBytes); Writer bigEndian = ByteArrayWriter.bigEndian(bigEndianBytes)) {
+        try (Writer littleEndian = new ByteArrayWriter(Endianness.LITTLE_ENDIAN, littleEndianBytes); Writer bigEndian = new ByteArrayWriter(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             littleEndian.writeDouble(Double.longBitsToDouble(0L));
             bigEndian.writeDouble(Double.longBitsToDouble(0L));
             littleEndian.writeDouble(Double.longBitsToDouble(9223372036854775807L));
@@ -235,7 +236,7 @@ public class AbstractWriterTest {
     public void testWriteUnsignedLEB128() throws IOException {
         byte[] littleEndianBytes = new byte[21];
         byte[] bigEndianBytes = new byte[21];
-        try (Writer littleEndian = ByteArrayWriter.littleEndian(littleEndianBytes); Writer bigEndian = ByteArrayWriter.bigEndian(bigEndianBytes)) {
+        try (Writer littleEndian = new ByteArrayWriter(Endianness.LITTLE_ENDIAN, littleEndianBytes); Writer bigEndian = new ByteArrayWriter(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             littleEndian.writeUnsignedLEB128(0L);
             bigEndian.writeUnsignedLEB128(0L);
             littleEndian.writeUnsignedLEB128(1L);
@@ -262,7 +263,7 @@ public class AbstractWriterTest {
     public void testWriteUnsignedLEB128Plus1() throws IOException {
         byte[] littleEndianBytes = new byte[20];
         byte[] bigEndianBytes = new byte[20];
-        try (Writer littleEndian = ByteArrayWriter.littleEndian(littleEndianBytes); Writer bigEndian = ByteArrayWriter.bigEndian(bigEndianBytes)) {
+        try (Writer littleEndian = new ByteArrayWriter(Endianness.LITTLE_ENDIAN, littleEndianBytes); Writer bigEndian = new ByteArrayWriter(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             littleEndian.writeUnsignedLEB128Plus1(-1L);
             bigEndian.writeUnsignedLEB128Plus1(-1L);
             littleEndian.writeUnsignedLEB128Plus1(0L);
@@ -289,7 +290,7 @@ public class AbstractWriterTest {
     public void testWriteSignedLEB128() throws IOException {
         byte[] littleEndianBytes = new byte[16];
         byte[] bigEndianBytes = new byte[16];
-        try (Writer littleEndian = ByteArrayWriter.littleEndian(littleEndianBytes); Writer bigEndian = ByteArrayWriter.bigEndian(bigEndianBytes)) {
+        try (Writer littleEndian = new ByteArrayWriter(Endianness.LITTLE_ENDIAN, littleEndianBytes); Writer bigEndian = new ByteArrayWriter(Endianness.BIG_ENDIAN, bigEndianBytes)) {
             littleEndian.writeSignedLEB128(0);
             bigEndian.writeSignedLEB128(0);
             littleEndian.writeSignedLEB128(1);

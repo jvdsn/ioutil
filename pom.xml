@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2019 Joachim Vandersmissen
+  ~ Copyright 2020 Joachim Vandersmissen
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
   ~
@@ -10,9 +10,9 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.joachimvandersmissen</groupId>
+    <groupId>com.jvdsn</groupId>
     <artifactId>ioutil</artifactId>
-    <version>1.5.1</version>
+    <version>1.6.0</version>
 
     <description>Java input and output utilities.</description>
     <inceptionYear>2018</inceptionYear>
@@ -27,7 +27,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.5.1</version>
+            <version>5.6.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -37,11 +37,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <doclint>none</doclint>
-                    <keywords>true</keywords>
-                    <noindex>true</noindex>
-                </configuration>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>

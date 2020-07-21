@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Joachim Vandersmissen
+ * Copyright 2020 Joachim Vandersmissen
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  *
@@ -8,51 +8,26 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 
-package com.joachimvandersmissen.ioutil.reader;
+package com.jvdsn.ioutil.reader;
 
+import com.jvdsn.ioutil.Endianness;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author Joachim Vandersmissen
  */
-public class ByteArrayReaderTest {
-    @Test
-    public void testPosition() throws IOException {
-        byte[] littleEndianBytes = new byte[3];
-        byte[] bigEndianBytes = new byte[3];
-        try (ByteArrayReader littleEndian = ByteArrayReader.littleEndian(littleEndianBytes, 1, 1); ByteArrayReader bigEndian = ByteArrayReader.bigEndian(bigEndianBytes, 1, 1)) {
-            Assertions.assertEquals(1, littleEndian.position());
-            Assertions.assertEquals(1, bigEndian.position());
-            littleEndian.readUnsignedByte();
-            bigEndian.readUnsignedByte();
-            Assertions.assertEquals(2, littleEndian.position());
-            Assertions.assertEquals(2, bigEndian.position());
-        }
-    }
-
-    @Test
-    public void testRemaining() throws IOException {
-        byte[] littleEndianBytes = new byte[3];
-        byte[] bigEndianBytes = new byte[3];
-        try (ByteArrayReader littleEndian = ByteArrayReader.littleEndian(littleEndianBytes, 1, 1); ByteArrayReader bigEndian = ByteArrayReader.bigEndian(bigEndianBytes, 1, 1)) {
-            Assertions.assertEquals(1, littleEndian.remaining());
-            Assertions.assertEquals(1, bigEndian.remaining());
-            littleEndian.readUnsignedByte();
-            bigEndian.readUnsignedByte();
-            Assertions.assertEquals(0, littleEndian.remaining());
-            Assertions.assertEquals(0, bigEndian.remaining());
-        }
-    }
-
+public class InputStreamReaderTest {
     @Test
     public void testReadUnsignedByte() throws IOException {
-        byte[] littleEndianBytes = {0x00, 0x7F, (byte) 0x80, (byte) 0xFF};
-        byte[] bigEndianBytes = {0x00, 0x7F, (byte) 0x80, (byte) 0xFF};
-        try (Reader littleEndian = ByteArrayReader.littleEndian(littleEndianBytes); Reader bigEndian = ByteArrayReader.bigEndian(bigEndianBytes)) {
+        InputStream littleEndianStream = new ByteArrayInputStream(new byte[]{0x00, 0x7F, (byte) 0x80, (byte) 0xFF});
+        InputStream bigEndianStream = new ByteArrayInputStream(new byte[]{0x00, 0x7F, (byte) 0x80, (byte) 0xFF});
+        try (Reader littleEndian = new InputStreamReader(Endianness.LITTLE_ENDIAN, littleEndianStream); Reader bigEndian = new InputStreamReader(Endianness.BIG_ENDIAN, bigEndianStream)) {
             Assertions.assertEquals(0, littleEndian.readUnsignedByte());
             Assertions.assertEquals(0, bigEndian.readUnsignedByte());
             Assertions.assertEquals(127, littleEndian.readUnsignedByte());
@@ -68,9 +43,9 @@ public class ByteArrayReaderTest {
 
     @Test
     public void testReadBytes() throws IOException {
-        byte[] littleEndianBytes = {0, 1, 2, 3};
-        byte[] bigEndianBytes = {0, 1, 2, 3};
-        try (Reader littleEndian = ByteArrayReader.littleEndian(littleEndianBytes); Reader bigEndian = ByteArrayReader.bigEndian(bigEndianBytes)) {
+        InputStream littleEndianStream = new ByteArrayInputStream(new byte[]{0, 1, 2, 3});
+        InputStream bigEndianStream = new ByteArrayInputStream(new byte[]{0, 1, 2, 3});
+        try (Reader littleEndian = new InputStreamReader(Endianness.LITTLE_ENDIAN, littleEndianStream); Reader bigEndian = new InputStreamReader(Endianness.BIG_ENDIAN, bigEndianStream)) {
             Assertions.assertArrayEquals(new byte[]{0, 0, 1, 0}, littleEndian.readBytes(new byte[4], 1, 2));
             Assertions.assertArrayEquals(new byte[]{0, 0, 1, 0}, bigEndian.readBytes(new byte[4], 1, 2));
             Assertions.assertArrayEquals(new byte[]{2, 3}, littleEndian.readBytes(new byte[2]));
